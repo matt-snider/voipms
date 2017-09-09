@@ -18,7 +18,7 @@ func main() {
 	app.Name = "voipms"
 	app.Commands = []cli.Command{
 		{
-			Name:  "getsms",
+			Name:  "sms",
 			Usage: "Get SMS's",
 			Action: func(c *cli.Context) error {
 				resp, err := client.GetSms()
@@ -43,7 +43,7 @@ func main() {
 		},
 
 		{
-			Name:  "getip",
+			Name:  "ip",
 			Usage: "Get current IP address as seen by VoIP MS",
 			Action: func(c *cli.Context) error {
 				resp, err := client.GetIp()
