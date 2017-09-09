@@ -27,7 +27,18 @@ func main() {
 					os.Exit(-1)
 				}
 
-				fmt.Println("Resp %s", resp)
+				lineFmt := "%-9s %-20s %-8s %-10s %s\n"
+				fmt.Printf(lineFmt, "ID", "Date", "Action", "Contact", "Message")
+				for _, sms := range resp.SmsList {
+					var action string
+					if sms.SmsType == "0" {
+						action = "sent"
+					} else {
+						action = "received"
+					}
+
+					fmt.Printf(lineFmt, sms.ID, sms.Date, action, sms.Contact, sms.Message)
+				}
 				return nil
 			},
 		},
