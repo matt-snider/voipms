@@ -41,6 +41,19 @@ func main() {
 				return nil
 			},
 		},
+
+		{
+			Name:  "getip",
+			Usage: "Get current IP address as seen by VoIP MS",
+			Action: func(c *cli.Context) error {
+				resp, err := client.GetIp()
+				if err != nil {
+					return cli.NewExitError(err, -1)
+				}
+				fmt.Printf("IP: %s\n", resp.IP)
+				return nil
+			},
+		},
 	}
 	app.Run(os.Args)
 }
