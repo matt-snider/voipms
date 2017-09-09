@@ -23,8 +23,7 @@ func main() {
 			Action: func(c *cli.Context) error {
 				resp, err := client.GetSms()
 				if err != nil {
-					fmt.Println("Error - ", err)
-					os.Exit(-1)
+					return cli.NewExitError(err, -1)
 				}
 
 				lineFmt := "%-9s %-20s %-8s %-10s %s\n"
