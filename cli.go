@@ -24,12 +24,14 @@ func main() {
 					Name:    "fetch",
 					Aliases: []string{"get"},
 					Action:  executeAction(vcli.FetchSms),
+					Usage:   "Fetch SMS messages",
 				},
 
 				{
 					Name:      "send",
 					Action:    executeAction(vcli.SendSms),
 					ArgsUsage: "[did] [dest] [msg]",
+					Usage:     "Send an SMS with a specific DID",
 				},
 			},
 			// Default to fetch
