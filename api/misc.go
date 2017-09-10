@@ -7,6 +7,7 @@ type IPResponse struct {
 	IP string `json:"ip"`
 }
 
+// GetIp returns the IPv4 address as seen by voip.ms
 func (c *VoipMsClient) GetIp() (*IPResponse, error) {
 	resp, err := c.do("GET", "getIP", nil)
 	if err != nil {

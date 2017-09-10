@@ -20,6 +20,9 @@ type SmsResponse struct {
 	SmsList []Sms `json:"sms"`
 }
 
+// GetSms returns an array of Sms instances.
+//
+// Currently this is just messages for the current day.
 func (c *VoipMsClient) GetSms() (*SmsResponse, error) {
 	resp, err := c.do("GET", "getSMS", nil)
 	if err != nil {
@@ -38,6 +41,7 @@ func (c *VoipMsClient) GetSms() (*SmsResponse, error) {
 	return data, nil
 }
 
+// SendSms sends an SMS Message to the given dest from the provided DID.
 func (c *VoipMsClient) SendSms(did, dest, msg string) error {
 	resp, err := c.do(
 		"POST",

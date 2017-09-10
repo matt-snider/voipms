@@ -23,6 +23,7 @@ const (
 	userAgent = "go/voipms-client (https://github.com/matt-snider/voipms)"
 )
 
+// NewClient returns a VoipMsClient for the given credentials.
 func NewClient(username, password string) *VoipMsClient {
 	return &VoipMsClient{
 		client:   http.DefaultClient,
@@ -67,7 +68,7 @@ func (c *VoipMsClient) newRequest(httpMethod, apiMethod string, params map[strin
 		contentType = writer.FormDataContentType()
 		writer.Close()
 	} else {
-		return nil, fmt.Errorf("Invalid http method for voipms api: %s", httpMethod)
+		panic("Invalid API Method for voipms api")
 	}
 
 	req, err := http.NewRequest(httpMethod, url, body)
