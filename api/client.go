@@ -36,14 +36,32 @@ func NewClient(username, password string) *VoipMsClient {
 	}
 }
 
-func (c *VoipMsClient) newRequest(method string) (*http.Request, error) {
-	url := c.apiUrl + "?api_username=" + c.username + "&api_password=" + c.password + "&method=" + method
-	req, err := http.NewRequest("GET", url, nil)
+func (c *VoipMsClient) newRequest(httpMethod, apiMethod string, params *map[string]string) (*http.Request, error) {
+	req, err := http.NewRequest(httpMethod, c.apiUrl, nil)
 	if err != nil {
 		return nil, err
 	}
+
+	// Build request depending on httpMethod
+	form := url.Values{}
+	if params != nil {
+		for key, value := range *params {
+			form.Add(key, value)
+		}
+	}
+	form.Add("api_username", c.username)
+	form.Add("api_password", c.password)
+	form.Add("method", apiMethod)
+	if httpMethod == http.MethodGet {
+		req.URL.RawQuery = form.Encode()
+	} else if httpMethod == http.MethodPost {
+		req.PostForm = form
+	} else {
+		return nil, fmt.Errorf("Invalid http method for voipms api: %s", httpMethod)
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Content-Type", "application/json")
 	return req, nil
 }
 
@@ -56,7 +74,7 @@ func (c *VoipMsClient) do(request *http.Request) (*http.Response, error) {
 }
 
 func (c *VoipMsClient) GetIp() (*IPResponse, error) {
-	req, err := c.newRequest("getIP")
+	req, err := c.newRequest("GET", "getIP", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +110,7 @@ type SmsResponse struct {
 }
 
 func (c *VoipMsClient) GetSms() (*SmsResponse, error) {
-	req, err := c.newRequest("getSMS")
+	req, err := c.newRequest("GET", "getSMS", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -114,8 +132,12 @@ func (c *VoipMsClient) GetSms() (*SmsResponse, error) {
 }
 
 func (c *VoipMsClient) SendSms(did, dest, msg string) error {
-	req, err := c.newRequest("sendSMS")
-	req.URL.RawQuery = req.URL.RawQuery + "&did=" + url.QueryEscape(did) + "&dst=" + url.QueryEscape(dest) + "&message=" + url.QueryEscape(msg)
+	params := &map[string]string{
+		"did":     url.QueryEscape(did),
+		"dst":     url.QueryEscape(dest),
+		"message": url.QueryEscape(msg),
+	}
+	req, err := c.newRequest("POST", "sendSMS", params)
 	fmt.Println(req.URL.RawQuery)
 	if err != nil {
 		return err
