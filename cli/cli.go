@@ -37,6 +37,25 @@ func main() {
 		return nil
 	}
 
+	sendSms := func(c *cli.Context) error {
+		did := c.Args().Get(0)
+		dest := c.Args().Get(1)
+		msg := c.Args().Get(2)
+		if did == "" {
+			return cli.NewExitError("[did] not set", -1)
+		} else if dest == "" {
+			return cli.NewExitError("[dest] not set", -1)
+		} else if msg == "" {
+			return cli.NewExitError("[msg] not set", -1)
+		}
+		err := client.SendSms(did, dest, msg)
+		if err != nil {
+			return cli.NewExitError(err, -1)
+		}
+		fmt.Println("Message sent.")
+		return nil
+	}
+
 	/**
 	 * CLI Declaration
 	 */
@@ -50,6 +69,12 @@ func main() {
 				{
 					Name:   "fetch",
 					Action: fetchSms,
+				},
+
+				{
+					Name:      "send",
+					Action:    sendSms,
+					ArgsUsage: "[did] [dest] [msg]",
 				},
 			},
 			// Default to fetch

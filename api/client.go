@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 type VoipMsClient struct {
@@ -112,6 +113,30 @@ func (c *VoipMsClient) GetSms() (*SmsResponse, error) {
 	return data, nil
 }
 
+func (c *VoipMsClient) SendSms(did, dest, msg string) error {
+	req, err := c.newRequest("sendSMS")
+	req.URL.RawQuery = req.URL.RawQuery + "&did=" + url.QueryEscape(did) + "&dst=" + url.QueryEscape(dest) + "&message=" + url.QueryEscape(msg)
+	fmt.Println(req.URL.RawQuery)
+	if err != nil {
+		return err
+	}
+	resp, err := c.do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	var data *VoipMsResponse
+	dec := json.NewDecoder(resp.Body)
+	if err := dec.Decode(&data); err != nil {
+		return err
+	}
+	if err := toError(data.Status); err != nil {
+		return err
+	}
+	return nil
+}
+
 func toError(status string) error {
 	var detail string
 
@@ -122,6 +147,8 @@ func toError(status string) error {
 		detail = "This IP is not enabled for API use"
 	case "invalid_method":
 		detail = "This is not a valid Method"
+	case "invalid_dst":
+		detail = "This is not a valid Destination Number"
 	case "missing_method":
 		detail = "Method must be provided when using the REST/JSON API"
 	case "missing_credentials":
