@@ -12,6 +12,6 @@ func GetIP(client *api.VoipMsClient, c *cli.Context) error {
 	if err != nil {
 		return cli.NewExitError(err, -1)
 	}
-	fmt.Printf("IP: %s\n", ip)
+	fmt.Fprintf(c.App.Writer, "IP: %s\n", ip)
 	return nil
 }

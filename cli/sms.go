@@ -43,6 +43,6 @@ func SendSms(client *api.VoipMsClient, c *cli.Context) error {
 	if err != nil {
 		return cli.NewExitError(err, -1)
 	}
-	fmt.Println("Message sent.")
+	fmt.Fprint(c.App.Writer, "Message sent.")
 	return nil
 }
