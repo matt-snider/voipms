@@ -6,6 +6,7 @@ import (
 	"net/url"
 )
 
+// Sms represents a message processed by voip.ms
 type Sms struct {
 	ID      string `json:"id"`
 	Date    string `json:"date"`
@@ -15,7 +16,7 @@ type Sms struct {
 	Message string `json:"message"`
 }
 
-type SmsResponse struct {
+type smsResponse struct {
 	VoipMsResponse
 	SmsList []Sms `json:"sms"`
 }
@@ -23,14 +24,14 @@ type SmsResponse struct {
 // GetSms returns an array of Sms instances.
 //
 // Currently this is just messages for the current day.
-func (c *VoipMsClient) GetSms() (*SmsResponse, error) {
+func (c *VoipMsClient) GetSms() ([]Sms, error) {
 	resp, err := c.do("GET", "getSMS", nil)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	var data *SmsResponse
+	var data *smsResponse
 	dec := json.NewDecoder(resp.Body)
 	if err := dec.Decode(&data); err != nil {
 		return nil, err
@@ -38,7 +39,7 @@ func (c *VoipMsClient) GetSms() (*SmsResponse, error) {
 	if err := toError(data.Status); err != nil {
 		return nil, err
 	}
-	return data, nil
+	return data.SmsList, nil
 }
 
 // SendSms sends an SMS Message to the given dest from the provided DID.

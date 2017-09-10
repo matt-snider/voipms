@@ -41,7 +41,7 @@ func main() {
 		{
 			Name:   "ip",
 			Usage:  "Get current IP address as seen by VoIP MS",
-			Action: executeAction(vcli.GetIp),
+			Action: executeAction(vcli.GetIP),
 		},
 	}
 

@@ -7,11 +7,11 @@ import (
 	"github.com/urfave/cli"
 )
 
-func GetIp(client *api.VoipMsClient, c *cli.Context) error {
-	resp, err := client.GetIp()
+func GetIP(client *api.VoipMsClient, c *cli.Context) error {
+	ip, err := client.GetIP()
 	if err != nil {
 		return cli.NewExitError(err, -1)
 	}
-	fmt.Printf("IP: %s\n", resp.IP)
+	fmt.Printf("IP: %s\n", ip)
 	return nil
 }

@@ -2,26 +2,26 @@ package api
 
 import "encoding/json"
 
-type IPResponse struct {
+type ipResponse struct {
 	VoipMsResponse
 	IP string `json:"ip"`
 }
 
-// GetIp returns the IPv4 address as seen by voip.ms
-func (c *VoipMsClient) GetIp() (*IPResponse, error) {
+// GetIP returns the IPv4 address as seen by voip.ms
+func (c *VoipMsClient) GetIP() (string, error) {
 	resp, err := c.do("GET", "getIP", nil)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer resp.Body.Close()
 
-	var data *IPResponse
+	var data *ipResponse
 	dec := json.NewDecoder(resp.Body)
 	if err := dec.Decode(&data); err != nil {
-		return nil, err
+		return "", err
 	}
 	if err := toError(data.Status); err != nil {
-		return nil, err
+		return "", err
 	}
-	return data, nil
+	return data.IP, nil
 }

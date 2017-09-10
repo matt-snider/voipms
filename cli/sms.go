@@ -8,14 +8,14 @@ import (
 )
 
 func FetchSms(client *api.VoipMsClient, c *cli.Context) error {
-	resp, err := client.GetSms()
+	smsData, err := client.GetSms()
 	if err != nil {
 		return cli.NewExitError(err, -1)
 	}
 
 	lineFmt := "%-9s %-20s %-8s %-10s %s\n"
 	fmt.Printf(lineFmt, "ID", "Date", "Action", "Contact", "Message")
-	for _, sms := range resp.SmsList {
+	for _, sms := range smsData {
 		var action string
 		if sms.SmsType == "0" {
 			action = "sent"
