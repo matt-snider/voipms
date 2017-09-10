@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"time"
 )
 
 // Sms represents a message processed by voip.ms
@@ -16,6 +17,16 @@ type Sms struct {
 	Message string `json:"message"`
 }
 
+// SmsFilter describes which Sms messages to return
+type SmsFilter struct {
+	ID       string
+	DID      string
+	Contact  string
+	FromDate time.Time
+	ToDate   time.Time
+	Limit    int
+}
+
 type smsResponse struct {
 	VoipMsResponse
 	SmsList []Sms `json:"sms"`
@@ -24,8 +35,13 @@ type smsResponse struct {
 // GetSms returns an array of Sms instances.
 //
 // Currently this is just messages for the current day.
-func (c *VoipMsClient) GetSms() ([]Sms, error) {
-	resp, err := c.do("GET", "getSMS", nil)
+func (c *VoipMsClient) GetSms(filter SmsFilter) ([]Sms, error) {
+	params := make(map[string]string)
+	if filter.ID != "" {
+		params["sms"] = filter.ID
+	}
+
+	resp, err := c.do("GET", "getSMS", params)
 	if err != nil {
 		return nil, err
 	}

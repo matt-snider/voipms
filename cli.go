@@ -23,8 +23,11 @@ func main() {
 				{
 					Name:    "fetch",
 					Aliases: []string{"get"},
-					Action:  executeAction(vcli.FetchSms),
 					Usage:   "Fetch SMS messages",
+					Action:  executeAction(vcli.FetchSms),
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "id"},
+					},
 				},
 
 				{

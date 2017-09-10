@@ -103,6 +103,8 @@ func toError(status string) error {
 		detail = "This is not a valid Destination Number"
 	case "invalid_did":
 		detail = "This is not a valid DID"
+	case "invalid_id":
+		detail = "This is not a valid ID"
 	case "missing_method":
 		detail = "Method must be provided when using the REST/JSON API"
 	case "missing_credentials":

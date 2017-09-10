@@ -8,7 +8,10 @@ import (
 )
 
 func FetchSms(client *api.VoipMsClient, c *cli.Context) error {
-	smsData, err := client.GetSms()
+	filter := api.SmsFilter{
+		ID: c.String("id"),
+	}
+	smsData, err := client.GetSms(filter)
 	if err != nil {
 		return cli.NewExitError(err, -1)
 	}
