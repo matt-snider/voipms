@@ -27,6 +27,17 @@ func main() {
 					Action:  executeAction(vcli.FetchSms),
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "id"},
+						cli.StringFlag{Name: "did"},
+						cli.StringFlag{Name: "to"},
+						cli.IntFlag{Name: "limit"},
+						cli.StringFlag{
+							Name:  "from-date",
+							Usage: "Include message from this date (e.g 2017-01-31)",
+						},
+						cli.StringFlag{
+							Name:  "to-date",
+							Usage: "Include message up until this date (e.g 2017-01-31)",
+						},
 					},
 				},
 

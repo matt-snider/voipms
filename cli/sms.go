@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/matt-snider/voipms/api"
 	"github.com/urfave/cli"
@@ -9,8 +10,14 @@ import (
 
 func FetchSms(client *api.VoipMsClient, c *cli.Context) error {
 	filter := api.SmsFilter{
-		ID: c.String("id"),
+		ID:       c.String("id"),
+		DID:      c.String("did"),
+		Contact:  c.String("to"),
+		Limit:    c.Int("limit"),
+		FromDate: maybeParseDate(c.String("from-date")),
+		ToDate:   maybeParseDate(c.String("to-date")),
 	}
+	fmt.Println("to-date", maybeParseDate(c.String("to-date")))
 	smsData, err := client.GetSms(filter)
 	if err != nil {
 		return cli.NewExitError(err, -1)
@@ -48,4 +55,12 @@ func SendSms(client *api.VoipMsClient, c *cli.Context) error {
 	}
 	fmt.Fprint(c.App.Writer, "Message sent.")
 	return nil
+}
+
+func maybeParseDate(date string) time.Time {
+	t, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		return time.Time{}
+	}
+	return t
 }

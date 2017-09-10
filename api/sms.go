@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -39,6 +40,21 @@ func (c *VoipMsClient) GetSms(filter SmsFilter) ([]Sms, error) {
 	params := make(map[string]string)
 	if filter.ID != "" {
 		params["sms"] = filter.ID
+	}
+	if filter.DID != "" {
+		params["did"] = filter.DID
+	}
+	if filter.Limit != 0 {
+		params["limit"] = strconv.Itoa(filter.Limit)
+	}
+	if filter.Contact != "" {
+		params["contact"] = filter.Contact
+	}
+	if filter.FromDate != (time.Time{}) {
+		params["from"] = filter.FromDate.Format("2006-01-02")
+	}
+	if filter.ToDate != (time.Time{}) {
+		params["to"] = filter.ToDate.Format("2006-01-02")
 	}
 
 	resp, err := c.do("GET", "getSMS", params)

@@ -99,6 +99,8 @@ func toError(status string) error {
 		detail = "This IP is not enabled for API use"
 	case "invalid_method":
 		detail = "This is not a valid Method"
+	case "invalid_contact":
+		detail = "This is not a valid Contact Number"
 	case "invalid_dst":
 		detail = "This is not a valid Destination Number"
 	case "invalid_did":
