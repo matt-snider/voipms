@@ -17,7 +17,6 @@ func FetchSms(client *api.VoipMsClient, c *cli.Context) error {
 		FromDate: maybeParseDate(c.String("from-date")),
 		ToDate:   maybeParseDate(c.String("to-date")),
 	}
-	fmt.Println("to-date", maybeParseDate(c.String("to-date")))
 	smsData, err := client.GetSms(filter)
 	if err != nil {
 		return cli.NewExitError(err, -1)

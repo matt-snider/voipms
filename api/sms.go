@@ -33,6 +33,13 @@ type smsResponse struct {
 	SmsList []Sms `json:"sms"`
 }
 
+// GetSmsToday returns all Sms messages today
+func (c *VoipMsClient) GetSmsToday() ([]Sms, error) {
+	return c.GetSms(SmsFilter{
+		FromDate: time.Now(),
+	})
+}
+
 // GetSms returns an array of Sms instances.
 //
 // Currently this is just messages for the current day.
