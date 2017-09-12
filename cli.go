@@ -53,6 +53,12 @@ func main() {
 		},
 
 		{
+			Name:   "balance",
+			Usage:  "Get balance info about this account (i.e. spending, call time, balance)",
+			Action: executeAction(vcli.GetBalance),
+		},
+
+		{
 			Name:   "ip",
 			Usage:  "Get current IP address as seen by VoIP MS",
 			Action: executeAction(vcli.GetIP),
